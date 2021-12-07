@@ -68,10 +68,13 @@ int main(void)
  * 1. The main part of the program contains the 'while(1)' loop. What condition
  *    is being evaluated within its brackets? (Hint: Think about the Boolean
  *    variables from Activity 2-Variables.) How many times will this loop run?
+ *    The while loop will run as long as the program runs (technically, it is while(true), do stuff)
  * 
  * 2. There is a second 'while(PWMperiod != 0)' loop inside the first while
  *    loop. What condition is being evaluated inside this while statement's
  *    brackets? How many times will the contents of this inner loop run?
+ *    The condition is while PWMperiod is not 0, then run the loop. The loop
+ *    will run 255 times.
  * 
  * 3. What condition is being evaluated by the if statement inside the loop?
  *    What happens when the if condition is true?
