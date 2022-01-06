@@ -43,17 +43,42 @@ int main(void)
         }
         
         // PWM LED4 brightness
-        PWMperiod = 255;
-        while(PWMperiod != 0)
+        PWMperiod = 128;
+        for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
         {
             if(TonLED4 == PWMperiod)
             {
                 LED4 = 1;
             }
-            PWMperiod --;
             __delay_us(20);
         }
         LED4 = 0;
+
+        if(PWMperiod == 128)
+        {
+            LED5 = 1;
+        }
+        else
+        {
+            LED5 = 0;
+        }
+
+        if(SW4 == 0)
+        {
+            period -= 1;
+        }
+        
+        if(SW5 == 0)
+        {
+            period += 1;
+        }
+        
+        // Make a tone
+        for(unsigned char cycles = 50; cycles != 0; cycles--)
+        {
+            BEEPER = !BEEPER;
+            for(unsigned int p = period; p != 0; p--);
+        }
         
         // Activate bootloader if SW1 is pressed.
         if(SW1 == 0)
@@ -68,7 +93,8 @@ int main(void)
  * 1. The main part of the program contains the 'while(1)' loop. What condition
  *    is being evaluated within its brackets? (Hint: Think about the Boolean
  *    variables from Activity 2-Variables.) How many times will this loop run?
- *    The while loop will run as long as the program runs (technically, it is while(true), do stuff)
+ *    In C and maybe other programming languague, 1 == true and 0 == false.
+ *    The while loop will run as long as the program runs (technically, it is while(true), do stuff).
  * 
  * 2. There is a second 'while(PWMperiod != 0)' loop inside the first while
  *    loop. What condition is being evaluated inside this while statement's
@@ -78,11 +104,13 @@ int main(void)
  * 
  * 3. What condition is being evaluated by the if statement inside the loop?
  *    What happens when the if condition is true?
+ *    It checks if TonLED4 equals PWMperiod, if it is, then turn on the light.
  * 
  * 4. Pressing the up or down buttons (SW3 and SW2) will increase or decrease
  *    the brightness of LED D4 using PWM (Pulse-Width Modulation). How many 
  *    different brightnesses can the LED have? What would the step size of one
  *    brightness level change be if it was expressed as a percentage?
+ *    There will be 256 level of brightness, in percentage, it would be ~0.4% increase/decrease at each level.
  * 
  * 5. The while loop needs three statements to perform its function. First, the
  *    assignment statement 'PWMperiod = 255;' sets the PWMperiod variable. Next,
@@ -112,6 +140,7 @@ int main(void)
         LED4 = 0;
         
  *    What is an advantage of using a for loop instead of a while loop?
+ *    A for loop is cleaner and easier to write than a while loop, and you don't have to worry about infinite loop.
  * 
  * 6. The 'for' loop, above, redefines the PWMperiod variable in the 
  *    initialization statement: 'for(unsigned char PWMperiod = 255; ...'
@@ -140,9 +169,11 @@ int main(void)
  *    Compile and run the code. When the program runs, the PWMperiod variable
  *    inside the for loop will count down from 255 to 0, and should be 0 when
  *    the loop finishes. Is LED D5 lit? What must the value of PWMperiod be?
+ *    The LED5 is lit up, and the value of the global PWMperiod is 128 because I just assigned 128 to it.
  * 
  *    Can you remove the global PWMperiod variable definition from the top of 
  *    the program now that PWMperiod is being defined in the for loop?
+ *    No, because the program can't see the PWMperiod in the for loop as it is located locally inside that loop.
  * 
  * 7. Add this code below the PWM loop to generate a tone:
                 
@@ -173,9 +204,11 @@ int main(void)
  *    to zero, increasing the time delay until the next cycle.
  * 
  *    What variable type is period? How large a number can this variable hold?
+ *    It is an unsigned int and it can hold a number up to 4294967295 (idk how to read that)
  * 
  * 8. Why is period copied to the local variable p inside the inner for loop?
  *    What would happen if the actual period variable was decremented instead?
+ *    Because if we use the actual period variable, it would be decremented really fast, and it would be able to playt technically nothing.
  * 
  * Programming Activities
  * 
