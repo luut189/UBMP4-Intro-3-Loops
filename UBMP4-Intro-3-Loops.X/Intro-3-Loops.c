@@ -33,13 +33,13 @@ int main(void)
         // Decrease brightness
         if(SW2 == 0)
         {
-            TonLED4 -= 1;
+            if(TonLED4 > 0) TonLED4 -= 1;
         }
 
         // Increase brightness
         if(SW3 == 0)
         {
-            TonLED4 += 1;
+            if(TonLED4 < 255) TonLED4 += 1;
         }
         
         // PWM LED4 brightness
@@ -53,32 +53,6 @@ int main(void)
             __delay_us(20);
         }
         LED4 = 0;
-
-        if(PWMperiod == 128)
-        {
-            LED5 = 1;
-        }
-        else
-        {
-            LED5 = 0;
-        }
-
-        if(SW4 == 0)
-        {
-            period -= 1;
-        }
-        
-        if(SW5 == 0)
-        {
-            period += 1;
-        }
-        
-        // Make a tone
-        for(unsigned char cycles = 50; cycles != 0; cycles--)
-        {
-            BEEPER = !BEEPER;
-            for(unsigned int p = period; p != 0; p--);
-        }
         
         // Activate bootloader if SW1 is pressed.
         if(SW1 == 0)
