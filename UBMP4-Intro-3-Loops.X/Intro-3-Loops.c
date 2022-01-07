@@ -19,9 +19,60 @@
 // TODO Set linker code offset to '800' under "Additional options" pull-down.
 
 // Program variable definitions
-unsigned char TonLED4 = 127;    // LED brightness PWM value
+unsigned char TonLED3 = 127;
+unsigned char TonLED4 = 127;
+unsigned char TonLED5 = 127;
+unsigned char TonLED6 = 127;
+
 unsigned char PWMperiod;        // PWM period counter for PWM loops
-unsigned int period = 460;      // Sound period value for later activities
+unsigned int period = 0;      // Sound period value for later activities
+
+bool running = true;
+
+void TonLEDChange(unsigned char TonLED, unsigned char LED) {
+    for(TonLED = 0; TonLED < 255; TonLED++) {
+        for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
+        {
+            if(TonLED == PWMperiod) {
+                if(LED == 3) {
+                    LED3 = 1;
+                } else if(LED == 4) {
+                    LED4 = 1;
+                } else if(LED == 5) {
+                    LED5 = 1;
+                } else if(LED == 6) {
+                    LED6 = 1;
+                }
+            }
+            __delay_us(20);
+        }
+        if(LED == 3) LED3 = 0;
+        else if(LED == 4) LED4 = 0;
+        else if(LED == 5) LED5 = 0;
+        else if(LED == 6) LED6 = 0;
+    }
+    for(TonLED = 255; TonLED != 0; TonLED--) {
+        for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
+        {
+            if(TonLED == PWMperiod) {
+                if(LED == 3) {
+                    LED3 = 1;
+                } else if(LED == 4) {
+                    LED4 = 1;
+                } else if(LED == 5) {
+                    LED5 = 1;
+                } else if(LED == 5) {
+                    LED6 = 1;
+                }
+            }
+            __delay_us(20);
+        }
+        if(LED == 3) LED3 = 0;
+        else if(LED == 4) LED4 = 0;
+        else if(LED == 5) LED5 = 0;
+        else if(LED == 6) LED6 = 0;
+    }
+}
 
 int main(void)
 {
@@ -30,16 +81,26 @@ int main(void)
 	
     while(1)
 	{
-        // Decrease brightness
+        /*
+        // Decrease brightness LED4
         if(SW2 == 0)
         {
             if(TonLED4 > 0) TonLED4 -= 1;
         }
 
-        // Increase brightness
+        // Increase brightness LED4
         if(SW3 == 0)
         {
             if(TonLED4 < 255) TonLED4 += 1;
+        }
+
+        // LED5
+        if(SW4 == 0) {
+            if(TonLED5 < 255) TonLED5 += 1;
+        }
+
+        if(SW5 == 0) {
+            if(TonLED5 > 0) TonLED5 -= 1;
         }
         
         // PWM LED4 brightness
@@ -50,9 +111,38 @@ int main(void)
             {
                 LED4 = 1;
             }
+            if(TonLED5 == PWMperiod) {
+                LED5 = 1;
+            }
             __delay_us(20);
         }
         LED4 = 0;
+        LED5 = 0;
+        */
+
+        TonLEDChange(TonLED3, 3);
+        TonLEDChange(TonLED4, 4);
+        TonLEDChange(TonLED5, 5);
+        TonLEDChange(TonLED6, 6);
+
+        /*
+        if(!running && SW2 == 0) {
+            running = true;
+            period = 0;
+        }
+
+        if(running) {
+            if(period == 100) {
+                running = false;
+            } else {
+                period++;
+            }
+            for(unsigned char i = 50; i != 0; i--) {
+                BEEPER = !BEEPER;
+                for(unsigned int p = period; p != 0; p--);
+            }
+        }
+        */
         
         // Activate bootloader if SW1 is pressed.
         if(SW1 == 0)
@@ -191,6 +281,7 @@ int main(void)
  *    holding SW2 will dim the LED until it is off and then keep if off, and
  *    pressing and holding SW3 will brighten the LED and keep it at maximum
  *    brightness.
+ *    Done
  * 
  * 2. Modify your program to control the brightness of LED D5 using SW4 and SW5
  *    while using SW3 and SW2 to control LED D4. Hint: To ensure each LED can
@@ -198,15 +289,19 @@ int main(void)
  *    PWM functions in the same loop. You can see the resulting PWM wave if you
  *    have access to an oscilloscope. If not, just light the other two LEDs and 
  *    compare the brightness of LEDs D4 and D5 to them.
+ *    Done
  * 
  * 3. Rather than having lights suddenly turn on at full brightness, or motors
  *    turn on at full power, create a program that uses a for loop and your PWM
  *    code to make a 'soft-start' program that slowly increases the PWM on-time
  *    when you press a button. Can you make it turn off in a similar way?
+ *    I think I kinda did this.
  * 
  * 4. Make a program that creates an automated, electronic 'pulse', repeatedly
  *    brightening and dimming one or more LEDs.
+ *    Done
  * 
  * 5. Make a 'chirp' or 'pew-pew' sound effect by sweeping through a range of
  *    frequencies when a button is pressed.
+ *    It sounds more like a futuristic gun sound.
  */
